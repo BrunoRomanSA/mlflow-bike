@@ -7,7 +7,7 @@ on:
 
 jobs:
   terraform:
-    uses: ./.github/workflows/terraform.ylm
+    uses: ./.github/workflows/terraform.yml
     with:
       environment: dev
       aws-assume-role-arn: "arn:aws:iam::503561450616:role/role-github-terraform-build"

@@ -4,7 +4,7 @@ provider "aws" {
 
 # Criar o bucket S3 para armazenar os dados
 resource "aws_s3_bucket" "data_bucket" {
-  bucket = "feature-store-bruno-data-bucket"
+  bucket = var.name
 }
 
 # Criar uma política para permitir acesso ao bucket (opcional)
