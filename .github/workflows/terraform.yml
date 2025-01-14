@@ -41,6 +41,12 @@ jobs:
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ inputs.aws-region }}
 
+      - name: Read detroy config
+        id: read-destroy-json
+        run: |
+          DESTROY="$(jq -r '.${{ inputs.environment }}' ./infra/destroy_config.json)"
+          echo "destroy=$(echo $DESTROY)" >> $GITHUB_OUTPUT
+
       - name: Terraform Initialize
         run: |
           cd infra && terraform init \
@@ -51,14 +57,23 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
+
+      - name: Terraform destroy
+        if: steps.read-destroy-json.outputs.destroy == 'true'
+        id: terraform-destroy
+        run: cd infra &&
+          terraform workspace select ${{ inputs.environment }} || terraform workspace new ${{ inputs.environment }} &&
+          terraform destroy -var-file="./${{ inputs.environment }}/terraform.tfvars" -auto-approve
       
       - name: Terraform Plan
+        if: steps.read-destroy-json.outputs.destroy != 'true'
         id: terraform-plan
         run: cd infra &&
           terraform workspace select ${{ inputs.environment }} || terraform workspace new ${{ inputs.environment }} &&
           terraform plan -var-file="./${{ inputs.environment }}/terraform.tfvars" -out="${{ inputs.environment }}.plan"
 
       - name: Terraform Apply
+        if: steps.read-destroy-json.outputs.destroy != 'true'
         id: terraform-apply
         run: cd infra &&
           terraform workspace select ${{ inputs.environment }} || terraform workspace new ${{ inputs.environment }} &&
