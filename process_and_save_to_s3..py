@@ -4,7 +4,7 @@ import os
 
 # Configuração do S3
 s3_client = boto3.client('s3', region_name='us-east-1')
-bucket_name = "my-feature-data-bucket"
+bucket_name = "feature-store-bruno-data-bucket"
 
 # Carregar e tratar os dados
 data = pd.read_csv("data/train.csv")
