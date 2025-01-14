@@ -21,10 +21,10 @@ jobs:
           terraform_version: 1.4.0
 
       - name: Initialize Terraform
-        run: terraform -chdir=infrastructure init
+        run: terraform -chdir=infra init
 
       - name: Apply Terraform
-        run: terraform -chdir=infrastructure apply -auto-approve
+        run: terraform -chdir=infra apply -auto-approve
 
   process-data:
     runs-on: ubuntu-latest
