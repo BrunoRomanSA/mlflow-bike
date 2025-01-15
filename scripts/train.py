@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score
 import boto3
 import os
 import sys
-from pandas import pd
+import pandas as pd
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 
 def download_file_from_s3():
