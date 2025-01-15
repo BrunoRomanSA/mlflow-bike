@@ -64,7 +64,7 @@ jobs:
 
       - name: Set environment variable
         env:
-          ENVIRONMENT: production # Altere conforme necessário
+          ENVIRONMENT: dev # Altere conforme necessário
         run: echo "ENVIRONMENT=$ENVIRONMENT"
 
       - name: Execute script
