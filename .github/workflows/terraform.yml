@@ -78,3 +78,9 @@ jobs:
         run: cd infra &&
           terraform workspace select ${{ inputs.environment }} || terraform workspace new ${{ inputs.environment }} &&
           terraform apply "${{ inputs.environment }}.plan"
+
+      - name: End Workflow if Destroy
+        if: steps.read-destroy-json.outputs.destroy == 'true'
+        run: |
+          echo "Destroy operation detected. Exiting workflow."
+          exit 0
