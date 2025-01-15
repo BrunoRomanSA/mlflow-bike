@@ -26,6 +26,6 @@ s3_client.upload_file(
 )
 
 print(f"Dados tratados enviados para s3://{bucket_name}/processed/processed_data.parquet")
-print(os.getenv("ENVIRONMENT"))
+print(type(os.getenv("ENVIRONMENT")))
 # Limpar o arquivo local
 os.remove(output_file)
