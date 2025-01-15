@@ -54,6 +54,7 @@ mlflow.set_experiment("RandomForest_Classification")
 
 
 downloaded_file = download_file_from_s3()
+print(downloaded_file)
 data = pd.read_parquet(downloaded_file)
 
 X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.2, random_state=42)
