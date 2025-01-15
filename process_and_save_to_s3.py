@@ -6,6 +6,8 @@ import os
 s3_client = boto3.client('s3', region_name='us-east-1')
 bucket_name = "feature-store-bruno-data-bucket-dev"
 
+print(os.environ("AWS_ACCESS_KEY_ID"))
+
 # Carregar e tratar os dados
 data = pd.read_csv("data/train.csv")
 
