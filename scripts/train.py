@@ -31,7 +31,7 @@ def download_file_from_s3():
         # Fazer download do arquivo
         s3_client.download_file(bucket_name, key, local_file)
         print(f"Arquivo '{key}' baixado com sucesso para '{local_file}'.")
-
+        return local_file
     except (NoCredentialsError, PartialCredentialsError):
         print("Erro: Não foi possível obter as credenciais da AWS.", file=sys.stderr)
     except Exception as e:
