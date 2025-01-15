@@ -19,10 +19,13 @@ jobs:
       aws-lock-dynamodb-table: "503561450616-terraform-lock"
       aws-region: "us-east-1"
 
+  outputs:
+    terraform_destroyed: ${{ steps.read-destroy-json.outputs.destroy }}
+
   process-data:
     runs-on: ubuntu-latest
     needs: setup-infra
-    if: needs.setup-infra.outputs.destroy != 'true'
+    if: needs.setup-infra.outputs.terraform_destroyed != 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
