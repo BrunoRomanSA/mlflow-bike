@@ -4,12 +4,12 @@ provider "aws" {
 
 # Criar o bucket S3 para armazenar os dados
 resource "aws_s3_bucket" "data_bucket" {
-  bucket = var.name
+  bucket = var.bucket_data
 }
 
 # Criar uma política para permitir acesso ao bucket (opcional)
 resource "aws_iam_role" "s3_access_role" {
-  name = "S3AccessRole"
+  name = var.role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -24,7 +24,7 @@ resource "aws_iam_role" "s3_access_role" {
 }
 
 resource "aws_iam_policy" "s3_access_policy" {
-  name        = "S3AccessPolicy"
+  name        = var.policy_name
   description = "Policy to allow S3 access for the bucket"
   policy      = jsonencode({
     Version = "2012-10-17"
@@ -33,8 +33,8 @@ resource "aws_iam_policy" "s3_access_policy" {
         Action   = ["s3:*"]
         Effect   = "Allow"
         Resource = [
-          "arn:aws:s3:::feature-store-bruno-data-bucket",
-          "arn:aws:s3:::feature-store-bruno-data-bucket/*"
+          "arn:aws:s3:::${var.bucket_data}",
+          "arn:aws:s3:::${var.bucket_data}/*"
         ]
       }
     ]

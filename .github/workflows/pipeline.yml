@@ -3,10 +3,7 @@ name: Data Processing Pipeline
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - feature**
 
 jobs:
   setup-infra:
