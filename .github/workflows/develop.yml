@@ -70,4 +70,4 @@ jobs:
       - name: Execute script
         env:
           ENVIRONMENT: ${{ env.ENVIRONMENT }}
-        run: python script/train.py
+        run: python scripts/train.py
