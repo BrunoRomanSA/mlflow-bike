@@ -24,21 +24,9 @@ def download_file_from_s3():
         key = "processed/processed_data.parquet"
         local_file = "processed_data.parquet"
 
-        # Configurar cliente STS para assumir a role
-        sts_client = boto3.client('sts')
-        assumed_role = sts_client.assume_role(
-            RoleArn="arn:aws:iam::503561450616:role/role-github-terraform-build",
-            RoleSessionName="githubActionsSession"
-        )
-        credentials = assumed_role['Credentials']
 
         # Configurar cliente S3 com as credenciais assumidas
-        s3_client = boto3.client(
-            's3',
-            aws_access_key_id=credentials['AccessKeyId'],
-            aws_secret_access_key=credentials['SecretAccessKey'],
-            aws_session_token=credentials['SessionToken']
-        )
+        s3_client = boto3.client('s3')
 
         # Fazer download do arquivo
         s3_client.download_file(bucket_name, key, local_file)
