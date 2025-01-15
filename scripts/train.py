@@ -45,7 +45,10 @@ downloaded_file = download_file_from_s3()
 print(downloaded_file)
 data = pd.read_parquet(downloaded_file)
 
-X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.2, random_state=42)
+# Split the data into features and target
+X = data.drop(columns=["count"])  # Features (all columns except 'count')
+y = data["count"]  # Target variable
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Objective function for Optuna
 def objective(trial):
