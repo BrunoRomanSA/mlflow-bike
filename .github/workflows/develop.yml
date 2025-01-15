@@ -62,12 +62,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Set environment variable
-        env:
-          ENVIRONMENT: dev # Altere conforme necessário
-        run: echo "ENVIRONMENT=$ENVIRONMENT"
-
       - name: Execute script
         env:
-          ENVIRONMENT: ${{ env.ENVIRONMENT }}
+          ENVIRONMENT: dev
         run: python scripts/train.py
