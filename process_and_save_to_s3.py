@@ -4,7 +4,7 @@ import os
 
 # Configuração do S3
 s3_client = boto3.client('s3', region_name='us-east-1')
-bucket_name = f"feature-store-bruno-data-bucket-dev"
+bucket_name = f"feature-store-bruno-data-bucket-{os.getenv("ENVIRONMENT")}"
 
 # Carregar e tratar os dados
 data = pd.read_csv("data/train.csv")
@@ -26,6 +26,5 @@ s3_client.upload_file(
 )
 
 print(f"Dados tratados enviados para s3://{bucket_name}/processed/processed_data.parquet")
-print(type(os.getenv("ENVIRONMENT")))
 # Limpar o arquivo local
 os.remove(output_file)
