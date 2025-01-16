@@ -12,7 +12,20 @@ data = pd.read_csv("data/train.csv")
 # Exemplo de tratamento
 data['is_clear_weather'] = (data['weather'] == 1).astype(int)
 data['is_rainy_weather'] = (data['weather'] >= 3).astype(int)
-data['event_time'] = pd.Timestamp.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+# Create a combined feature for holidays and working days
+data['is_holiday_workingday'] = ((data['holiday'] == 1) & (data['workingday'] == 1)).astype(int)
+
+# Convert 'datetime' column to datetime object
+data['datetime'] = pd.to_datetime(data['datetime'])
+# Create new features
+data['hour'] = data['datetime'].dt.hour
+data['day_of_week'] = data['datetime'].dt.dayofweek
+data['month'] = data['datetime'].dt.month
+
+
+data.drop(columns=["datetime"], inplace=True)
 
 # Salvar os dados tratados localmente
 output_file = "processed_data.parquet"
