@@ -12,6 +12,29 @@ import sys
 import pandas as pd
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 
+
+def promote_model_to_staging(model_name):
+    try:
+        # Obter a última versão do modelo registrado
+        client = mlflow.tracking.MlflowClient()
+        latest_versions = client.get_latest_versions(model_name, stages=["None"])
+
+        if not latest_versions:
+            raise Exception(f"Nenhum modelo sem estágio encontrado para '{model_name}'.")
+
+        # Promover o modelo para staging
+        model_version = latest_versions[0].version
+        client.transition_model_version_stage(
+            name=model_name,
+            version=model_version,
+            stage="Staging",
+            archive_existing_versions=False  # Não arquiva outras versões
+        )
+        print(f"Modelo '{model_name}' versão {model_version} promovido para 'Staging'.")
+
+    except Exception as e:
+        print(f"Erro ao promover o modelo para 'Staging': {e}")
+
 def download_file_from_s3():
     try:
         # Obter variáveis de ambiente
@@ -86,14 +109,16 @@ def objective(trial):
 
 # Create and run the study with Optuna
 study = optuna.create_study(direction='maximize', pruner=HyperbandPruner())
-study.optimize(objective, n_trials=100)
+study.optimize(objective, n_trials=20)
 
 # Print the best hyperparameters
 print("Best hyperparameters: ", study.best_params)
 
-
+# Train the best model
 best_model_params = study.best_params
 best_model = RandomForestClassifier(**best_model_params)
 best_model.fit(X_train, y_train)
 
 mlflow.sklearn.log_model(best_model, "best_random_forest_model", registered_model_name="RandomForestClassifier")
+
+promote_model_to_staging(RandomForestClassifier)
